@@ -13,3 +13,15 @@ find . -type f -exec ls -S {} +
 ```
 diff -Nur old_folder/ new_folder/
 ```
+
+## GDB
+### BackTrace
+```
+thread apply all bt full
+```
+
+### Print to file
+```
+set logging on
+set logging file gdb_out_file.log
+```
