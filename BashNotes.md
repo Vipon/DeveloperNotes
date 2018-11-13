@@ -25,3 +25,9 @@ thread apply all bt full
 set logging on
 set logging file gdb_out_file.log
 ```
+
+## Hardware analysis
+### Get short information about disks
+```
+sudo lshw -short -C disk
+```
