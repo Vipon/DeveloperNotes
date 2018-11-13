@@ -31,3 +31,8 @@ set logging file gdb_out_file.log
 ```
 sudo lshw -short -C disk
 ```
+
+### Get info about CPU
+```
+lcpu
+```
