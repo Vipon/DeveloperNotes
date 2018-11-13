@@ -31,8 +31,13 @@ set logging file gdb_out_file.log
 ```
 sudo lshw -short -C disk
 ```
+### Get info about RAM
+```
+sudo lshw -short -C memory
+```
 
 ### Get info about CPU
 ```
 lcpu
 ```
+
