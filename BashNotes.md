@@ -14,6 +14,17 @@ find . -type f -exec ls -S {} +
 diff -Nur old_folder/ new_folder/
 ```
 
+## Clang
+### Flags
+ * -dM --- генерирует список доступных макроопределений **#define **
+ * -E --- прекратить компиляцию после этапа препроцессора.
+ * -x --- спецификация языка программирования. Если ничего не указано, то тип языка определяется по расширению файла.
+
+### Get list of predefined macrosses
+```
+clang -dM -E -x c /dev/null
+```
+
 ## GDB
 ### BackTrace
 ```
@@ -39,6 +50,9 @@ sudo lshw -short -C memory
 ### Get info about CPU
 ```
 lcpu
+```
+```
+cat /proc/cpuinfo
 ```
 
 ## GNOME desktop
