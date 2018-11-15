@@ -47,7 +47,8 @@ lcpu
 cd ~/.config/autostart/
 
 touch YOUR_PROGRAM.desktop
-echo "[Desktop Entry]\nName=YOUR_PROGRAM
+echo "[Desktop Entry]
+Name=YOUR_PROGRAM
 Comment=Comments
 Exec=PATH_TO_APP
 Icon=PATH_TO_ICON
