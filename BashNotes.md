@@ -34,6 +34,12 @@ find . -type f -exec ls -S {} +
 diff -Nur old_folder/ new_folder/
 ```
 
+### Отслеживание обновления файла
+```
+tail -f [FILE_NAME] | less
+```
+
+
 ## Clang.
 ### Flags.
  * -dM --- генерирует список доступных макроопределений **#define **
@@ -55,6 +61,7 @@ clang -dM -E -x c /dev/null
 |__Print to file__|
 |```set logging on```<br>```set logging file gdb_out_file.log```|
 |__Display source code__|
+|||
 
 # Hardware analysis.
 ### Get short information about disks.	
