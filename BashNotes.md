@@ -45,19 +45,18 @@ diff -Nur old_folder/ new_folder/
 clang -dM -E -x c /dev/null
 ```
 
-## GDB.
-### BackTrace.
-```
-thread apply all bt full
-```
+# Debugers
+| GDB | LLDB|
+|--------|-------|
+|__Breakpoints__|
+| ```break [SYM_NAME/VIRT_ADDR]```|```break set -a [SYM_NAME/VIRT_ADDR]```|
+|__BackTrace__|
+|```thread apply all bt full```|
+|__Print to file__|
+|```set logging on```<br>```set logging file gdb_out_file.log```|
+|__Display source code__|
 
-### Print to file.
-```
-set logging on
-set logging file gdb_out_file.log
-```
-
-## Hardware analysis.
+# Hardware analysis.
 ### Get short information about disks.	
 ```
 sudo lshw -short -C disk
@@ -75,7 +74,7 @@ lcpu
 cat /proc/cpuinfo
 ```
 
-## GNOME desktop.
+# GNOME desktop.
 ### Start up application at the start.
 ```
 cd ~/.config/autostart/
