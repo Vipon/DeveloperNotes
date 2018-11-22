@@ -1,7 +1,7 @@
 # BashNotes
 Репозиторий содержит различные записи о синтаксисе Bash, как работать в терминале, полезные комбинации команд с параметрами, а так же описание различных утилит.
 
-[Bash](./bash/bash.md) 
-[Compilers]()
-[Debugers]()
-[Useful commands]()
+* [Bash](./bash/bash.md) 
+* [Compilers]()
+* [Debugers]()
+* [Useful commands]()
