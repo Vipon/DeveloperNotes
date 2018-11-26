@@ -10,6 +10,7 @@ LLVM_PATH=$PWD/llvm/
 BUILD_PATH=$PWD/build/
 
 LIBCXX=$FALSE
+TEST=$FALSE
 
 check_utils()
 {
@@ -42,6 +43,7 @@ print_help()
     echo -e "\t[-llvm]\t\t\t path to llvm source code."
     echo -e "\t[-build]\t\t where whould be build."
     echo -e "\t[-libcxx]\t\t built libcxx."
+    echo -e "\t[-t|--test]\t\t\t test clang."
     echo -e "\t[-h|--help]\t\t print this man."
 }
 
@@ -87,6 +89,11 @@ arg_parse ()
 
             -libcxx)
                 LIBCXX=$TRUE
+                shift
+                ;;
+
+            -t|--test)
+                TEST=$TRUE
                 shift
                 ;;
 
@@ -229,12 +236,27 @@ build_code()
 }
 
 
+clang_test()
+{
+    if [ ! -d $BUILD_PATH ]; then
+        build_code
+    fi
+
+    cd $BUILD_PATH
+    make -j$NUM_THREADS check-clang
+}
+
+
 main()
 {
     check_utils
     arg_parse $@
     download_source_code
-    build_code
+    if [ $TEST ]; then
+        clang_test
+    else
+        build_code
+    fi
 
     exit 0
 }
