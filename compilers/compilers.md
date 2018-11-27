@@ -1,5 +1,20 @@
 # Компиляторы
 ## Clang
+### Структура исходных файлов
+Для того чтобы найти функцию __main__ компилятора __clang__ в исходниках, надо искать __add_clang_tool(clang__ в файлах cmake. Для версии __clang 8.0.0__ эта команда находится в __/clang/tools/driver/CMakeLists.txt__ и выглядит вот так:
+```
+add_clang_tool(clang
+  driver.cpp
+  cc1_main.cpp
+  cc1as_main.cpp
+  cc1gen_reproducer_main.cpp
+
+  DEPENDS
+  ${tablegen_deps}
+  )
+```
+Соответсвенно, искать __main__ надо в одном из перечисленных файлов. Сейчас он находится в __driver.cpp__. Это функция, с которой начинает своё исполнение __clang__.
+
 ### Сборка clang
 * [build_clang.sh](./build_clang.sh) --- скрипт, который скачает все необходимые файлы, соберёт и протестирует clang/llvm.
 
