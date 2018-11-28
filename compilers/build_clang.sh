@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TRUE=0
-FALSE=-1
+TRUE="true"
+FALSE="false"
 
 USAGE="arg_parse -j [NUM_THREADS] -llvm [PATH_TO_SOURCE] -build [WHERE_BUILD]"
 NUM_THREADS=1
@@ -136,7 +136,7 @@ download_clang()
     fi
 
     git clone https://git.llvm.org/git/clang.git/ clang/
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: git clone https://git.llvm.org/git/clang.git/."
         exit -1
     fi
@@ -150,7 +150,7 @@ download_libcxx()
     cd $LLVM_PATH/projects/
     if [ ! -f libcxx/.git_success ]; then
         git clone https://git.llvm.org/git/libcxx.git/ libcxx/
-        if [ ! $? ]; then
+        if [ "$?" != "0" ]; then
             echo "ERROR: git clone https://git.llvm.org/git/libcxx.git/."
             exit -1
         fi
@@ -162,7 +162,7 @@ download_libcxx()
     fi
 
     git clone https://git.llvm.org/git/libcxxabi.git/ libcxxabi/
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: git clone https://git.llvm.org/git/libcxxabi.git/."
         exit -1
     fi
@@ -175,7 +175,7 @@ download_source_code()
 {
     download_llvm
     download_clang
-    if [ $LIBCXX ]; then
+    if [ $LIBCXX == $TRUE ]; then
         download_libcxx
     fi
 }
@@ -200,13 +200,13 @@ build_libcxx()
     cd build/
 
     cmake -DCMAKE_BUILD_TYPE=Release ..
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: libcxx cmake."
         exit -1
     fi
 
     make -j$NUM_THREADS
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: libcxx make."
         exit -1
     fi
@@ -219,18 +219,18 @@ build_code()
     cd $BUILD_PATH
 
     cmake -DCMAKE_BUILD_TYPE=Release $LLVM_PATH
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: llvm cmake."
         exit -1
     fi
 
     make -j$NUM_THREADS
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: llvm make."
         exit -1
     fi
 
-    if [ LIBCXX ]; then
+    if [ $LIBCXX == $TRUE ]; then
         build_libcxx
     fi
 }
@@ -252,7 +252,7 @@ main()
     check_utils
     arg_parse $@
     download_source_code
-    if [ $TEST ]; then
+    if [ $TEST == $TRUE ]; then
         clang_test
     else
         build_code
