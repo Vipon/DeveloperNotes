@@ -17,26 +17,32 @@ diff -Nur old_folder/ new_folder/
 ```
 
 
+## Вывод всех слов попадающих под паттерн в файле
+```
+ grep -oE "\w*[PATERN]" [FILE_NAME]
+```
+
+
 ## Отслеживание обновления файла
 ```
 tail -f [FILE_NAME] | less
 ```
 
 
-## Hardware analysis.
-### Get short information about disks.
+## Hardware analysis
+### Get short information about disks
 ```
 sudo lshw -short -C disk
 ```
 
 
-### Get info about RAM.
+### Get info about RAM
 ```
 sudo lshw -short -C memory
 ```
 
 
-### Get info about CPU.
+### Get info about CPU
 ```
 lcpu
 ```
