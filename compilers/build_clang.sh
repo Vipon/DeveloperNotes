@@ -9,8 +9,10 @@ NUM_THREADS=1
 LLVM_PATH=$PWD/llvm/
 BUILD_PATH=$PWD/build/
 
-LIBCXX=$FALSE
+LLD=$FALSE
 TEST=$FALSE
+LIBCXX=$FALSE
+COMP_RT=$FALSE
 
 check_utils()
 {
@@ -42,7 +44,10 @@ print_help()
     echo -e "\t[-j NUM_THREADS]\t set number of threads for make."
     echo -e "\t[-llvm]\t\t\t path to llvm source code."
     echo -e "\t[-build]\t\t where whould be build."
+    echo -e "\t[--full]\t\t build everything."
+    echo -e "\t[-lld]\t\t built lld."
     echo -e "\t[-libcxx]\t\t built libcxx."
+    echo -e "\t[--comp-rt]\t\t built compiler-rt."
     echo -e "\t[-t|--test]\t\t\t test clang."
     echo -e "\t[-h|--help]\t\t print this man."
 }
@@ -87,8 +92,25 @@ arg_parse ()
                 shift 2
                 ;;
 
+            --full)
+                LLD=$TRUE
+                LIBCXX=$TRUE
+                COMP_RT=$TRUE
+                shift
+                ;;
+
+            -lld)
+                LLD=$TRUE
+                shift
+                ;;
+
             -libcxx)
                 LIBCXX=$TRUE
+                shift
+                ;;
+
+            --comp-rt)
+                COMP_RT=$TRUE
                 shift
                 ;;
 
@@ -202,8 +224,12 @@ download_source_code()
 {
     download_llvm
     download_clang
+    if [ $COMP_RT == $TRUE ]; then
     download_compiler_rt
+    fi
+    if [ $LLD == $TRUE ]; then
     download_lld
+    fi
     if [ $LIBCXX == $TRUE ]; then
         download_libcxx
     fi
