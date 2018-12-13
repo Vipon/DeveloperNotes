@@ -119,7 +119,7 @@ download_llvm()
     mkdir -p $LLVM_PATH
 
     git clone https://git.llvm.org/git/llvm.git/ $LLVM_PATH
-    if [ ! $? ]; then
+    if [ "$?" != "0" ]; then
         echo "ERROR: git clone https://git.llvm.org/git/llvm.git/."
         exit -1
     fi
@@ -170,11 +170,40 @@ download_libcxx()
     touch libcxxabi/.git_success
 }
 
+download_compiler_rt()
+{
+    cd $LLVM_PATH/projects/
+    if [ ! -f compiler-rt/.git_success ]; then
+        git clone https://git.llvm.org/git/compiler-rt.git/ compiler-rt/
+        if [ "$?" != "0" ]; then
+            echo "ERROR: git clone https://git.llvm.org/git/compiler-rt.git/."
+            exit -1
+        fi
+    fi
+
+    touch compiler-rt/.git_success
+}
+
+download_lld()
+{
+    cd $LLVM_PATH/tools/
+    if [ ! -f lld/.git_success ]; then
+        git clone https://git.llvm.org/git/lld.git/ lld/
+        if [ "$?" != "0" ]; then
+            echo "ERROR: git clone https://git.llvm.org/git/lld.git/."
+            exit -1
+        fi
+    fi
+
+    touch lld/.git_success
+}
 
 download_source_code()
 {
     download_llvm
     download_clang
+    download_compiler_rt
+    download_lld
     if [ $LIBCXX == $TRUE ]; then
         download_libcxx
     fi
