@@ -236,38 +236,6 @@ download_source_code()
 }
 
 
-build_libcxx()
-{
-    # Check exesting of libcxx directory
-    if [ ! -f $LLVM_PATH/projects/libcxx/.git_success ]; then
-        echo "ERROR: problem with $LLVM_PATH/projects/libcxx/."
-        exit -1
-    fi
-
-    # Check exesting of libcxxabi directory
-    if [ ! -f $LLVM_PATH/projects/libcxxabi/.git_success ]; then
-        echo "ERROR: problem with $LLVM_PATH/projects/libcxxabi/."
-        exit -1
-    fi
-
-    cd $LLVM_PATH/projects/libcxx/
-    mkdir build/
-    cd build/
-
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    if [ "$?" != "0" ]; then
-        echo "ERROR: libcxx cmake."
-        exit -1
-    fi
-
-    make -j$NUM_THREADS
-    if [ "$?" != "0" ]; then
-        echo "ERROR: libcxx make."
-        exit -1
-    fi
-}
-
-
 build_code()
 {
     mkdir -p $BUILD_PATH
@@ -283,10 +251,6 @@ build_code()
     if [ "$?" != "0" ]; then
         echo "ERROR: llvm make."
         exit -1
-    fi
-
-    if [ $LIBCXX == $TRUE ]; then
-        build_libcxx
     fi
 }
 
