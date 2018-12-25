@@ -13,6 +13,7 @@ LLD=$FALSE
 TEST=$FALSE
 LIBCXX=$FALSE
 COMP_RT=$FALSE
+BUILD_TYPE=Release
 
 check_utils()
 {
@@ -42,13 +43,14 @@ print_help()
     echo
     echo -e "Available parameters:"
     echo -e "\t[-j NUM_THREADS]\t set number of threads for make."
+    echo -e "\t[--debug]\t\t make debug build."
     echo -e "\t[-llvm]\t\t\t path to llvm source code."
     echo -e "\t[-build]\t\t where whould be build."
     echo -e "\t[--full]\t\t build everything."
-    echo -e "\t[-lld]\t\t built lld."
+    echo -e "\t[-lld]\t\t\t built lld."
     echo -e "\t[-libcxx]\t\t built libcxx."
     echo -e "\t[--comp-rt]\t\t built compiler-rt."
-    echo -e "\t[-t|--test]\t\t\t test clang."
+    echo -e "\t[-t|--test]\t\t test clang."
     echo -e "\t[-h|--help]\t\t print this man."
 }
 
@@ -60,6 +62,11 @@ arg_parse ()
             -j)
                 NUM_THREADS=$2
                 shift 2
+                ;;
+
+            --debug)
+                BUILD_TYPE=Debug
+                shift 1
                 ;;
 
             -llvm)
@@ -241,7 +248,7 @@ build_code()
     mkdir -p $BUILD_PATH
     cd $BUILD_PATH
 
-    cmake -DCMAKE_BUILD_TYPE=Release $LLVM_PATH
+    cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE $LLVM_PATH
     if [ "$?" != "0" ]; then
         echo "ERROR: llvm cmake."
         exit -1
