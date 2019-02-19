@@ -5,4 +5,4 @@
 * [Compilers](./compilers/compilers.md)
 * [Debugers](./debugers/debugers.md)
 * [Useful commands](./useful/useful.md)
-* [Setup environment](./set_env/set_env.md)
+* [Setup environment](./setEnv/setEnv.md)
