@@ -7,5 +7,8 @@
 |```thread apply all bt full```|
 |__Print to file__|
 |```set logging on```<br>```set logging file gdb_out_file.log```|
-|__Display source code__|
+|__Display code__|
+```layout src```
+|__Display registers__|
+```info registers [REG_NAME]```
 |||
