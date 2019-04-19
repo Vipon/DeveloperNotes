@@ -84,3 +84,41 @@ class SmallVector : public SmallVectorImpl<T>, SmallVectorStorage<T, N>;
 ```
 clang -dM -E -x c /dev/null
 ```
+
+
+# Program with clang
+## Clang driver
+```
+int initDriver(const std::string& argv0, const std::vector<std::string>& gccFlags)
+{
+    clang::SmallVector<const char *, 256> argv(gccFlags.size() + 1);
+    argv[0] = argv0.c_str();
+    auto tempIt = argv.begin();
+    ++tempIt;
+    std::transform(gccFlags.begin(), gccFlags.end(), tempIt,
+        [](const auto& arg) {
+            return arg.c_str();
+        }
+    );
+
+    bool CanonicalPrefixes = true; // depends on option "-no-canonical-prefixes"
+    std::string targetTriple(getTriple(march));
+    std::cout << targetTriple << std::endl;
+    std::string Path = GetExecutablePath(argv[0], CanonicalPrefixes);
+
+    clang::IntrusiveRefCntPtr<clang::DiagnosticOptions> DiagOpts =
+        CreateAndPopulateDiagOpts(argv);
+    clang::TextDiagnosticPrinter *DiagClient
+        = new clang::TextDiagnosticPrinter(llvm::errs(), &*DiagOpts);
+    clang::IntrusiveRefCntPtr<clang::DiagnosticIDs> DiagID(new clang::DiagnosticIDs());
+
+    clang::DiagnosticsEngine Diags(DiagID, &*DiagOpts, DiagClient);
+
+    clang::driver::Driver driver(Path, targetTriple, Diags);
+    std::unique_ptr<clang::driver::Compilation> C(driver.BuildCompilation(argv));
+    auto& hostToolChain = C->getDefaultToolChain(); 
+
+    libPaths = hostToolChain.getFilePaths(); // standard library paths
+    std::string installedDir = driver.getInstalledDir(); // directory of executable file 
+}
+```
