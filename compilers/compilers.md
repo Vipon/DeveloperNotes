@@ -89,6 +89,65 @@ clang -dM -E -x c /dev/null
 # Program with clang
 ## Clang driver
 ```
+#include "clang/Basic/Version.h"
+#include "clang/Driver/Driver.h"
+#include "clang/Driver/Options.h"
+#include "clang/Driver/Compilation.h"
+#include "clang/Frontend/CompilerInvocation.h"
+#include "clang/Frontend/TextDiagnosticPrinter.h"
+#include "clang/Basic/DiagnosticOptions.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Path.h"
+#include "llvm/Support/Host.h"
+#include "llvm/Support/Program.h"
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/ADT/SmallVector.h"
+#include "llvm/ADT/SmallString.h"
+#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm/Option/ArgList.h"
+#include "llvm/Option/OptTable.h"
+#include "llvm/Support/VirtualFileSystem.h"
+#include "lld/Common/Driver.h"
+
+
+std::string GetExecutablePath(const char *Argv0, bool CanonicalPrefixes)
+{
+  if (!CanonicalPrefixes) {
+    clang::SmallString<128> ExecutablePath(Argv0);
+    // Do a PATH lookup if Argv0 isn't a valid path.
+    if (!llvm::sys::fs::exists(ExecutablePath))
+      if (llvm::ErrorOr<std::string> P =
+              llvm::sys::findProgramByName(ExecutablePath))
+        ExecutablePath = *P;
+    return ExecutablePath.str();
+  }
+
+  // This just needs to be some symbol in the binary; C++ doesn't
+  // allow taking the address of ::main however.
+  void *P = (void*) (intptr_t) GetExecutablePath;
+  return llvm::sys::fs::getMainExecutable(Argv0, P);
+}
+
+
+// This lets us create the DiagnosticsEngine with a properly-filled-out
+// DiagnosticOptions instance.
+static clang::DiagnosticOptions *CreateAndPopulateDiagOpts(
+    clang::ArrayRef<const char *> argv)
+{
+    auto *DiagOpts = new clang::DiagnosticOptions;
+    std::unique_ptr<llvm::opt::OptTable> Opts(clang::driver::createDriverOptTable());
+    unsigned MissingArgIndex, MissingArgCount;
+    llvm::opt::InputArgList Args =
+       Opts->ParseArgs(argv.slice(1), MissingArgIndex, MissingArgCount);
+    // We ignore MissingArgCount and the return value of ParseDiagnosticArgs.
+    // Any errors that would be diagnosed here will also be diagnosed later,
+    // when the DiagnosticsEngine actually exists.
+    (void)ParseDiagnosticArgs(*DiagOpts, Args);
+    return DiagOpts;
+}
+
+
 int initDriver(const std::string& argv0, const std::vector<std::string>& gccFlags)
 {
     clang::SmallVector<const char *, 256> argv(gccFlags.size() + 1);
