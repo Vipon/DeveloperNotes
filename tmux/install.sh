@@ -1,5 +1,7 @@
 #!/bin/bash
 
-cp tmux.sh ~/
-cp .tmux.conf ~/
+DIR="$(dirname "$0")"
+
+cp ${DIR}/tmux.sh ~/
+cp ${DIR}/.tmux.conf ~/
 
