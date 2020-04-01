@@ -61,7 +61,8 @@ filetype plugin on
 filetype indent on " file type based indentation
 
 " Indentation settings for using 4 spaces instead of tabs.
-autocmd FileType c,cpp,java,txt set shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType c,cpp,sh,java,txt set shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType haskell,cmake set shiftwidth=2 softtabstop=2 expandtab
 
 " Show tabs and spaces.
 set listchars=tab:>-,nbsp:·,space:·
