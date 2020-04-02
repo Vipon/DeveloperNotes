@@ -89,6 +89,10 @@ Plug 'airblade/vim-gitgutter'   " show line status
 Plug 'rhysd/git-messenger.vim'  " show blame
 Plug 'tpope/vim-fugitive'       " show branch + cmds
 
+" LSP
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
