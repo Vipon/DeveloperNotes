@@ -62,7 +62,7 @@ filetype indent on " file type based indentation
 
 " Indentation settings for using 4 spaces instead of tabs.
 autocmd FileType c,cpp,sh,java,txt set shiftwidth=4 softtabstop=4 expandtab
-autocmd FileType haskell,cmake set shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType haskell,cmake,vim set shiftwidth=2 softtabstop=2 expandtab
 
 " Show tabs and spaces.
 set listchars=tab:>-,nbsp:·,space:·
@@ -70,3 +70,35 @@ set list
 
 " Aout removing useless whitespaces at the end of lines.
 autocmd BufWritePre * %s/\s\+$//e
+
+" Vim-plug commands
+let PLUGIN_DIR = $HOME . '/.vim/plugins/'
+
+" Plugins will be downloaded under the specified directory.
+call plug#begin(PLUGIN_DIR)
+
+" Declare the list of plugins.
+Plug 'terryma/vim-multiple-cursors' " multiple-cursors like Sublime
+
+" Language support
+Plug 'neovimhaskell/haskell-vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+
+" Git
+Plug 'airblade/vim-gitgutter'   " show line status
+Plug 'rhysd/git-messenger.vim'  " show blame
+Plug 'tpope/vim-fugitive'       " show branch + cmds
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+if executable('ccls')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'ccls',
+    \ 'cmd': {server_info->['ccls']},
+    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+    \ 'initialization_options': {'cache': {'directory': '/tmp/ccls/cache' }},
+    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+    \ })
+endif
+
