@@ -109,3 +109,6 @@ if executable('ccls')
     \ })
 endif
 
+" Close annoying  and excess LSP SignatureHelp
+let g:lsp_signature_help_enabled = 0
+
