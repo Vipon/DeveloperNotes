@@ -6,9 +6,9 @@ FALSE="false"
 NUM_THREADS=`nproc`
 
 VERSION="9.0.1"
-LLVM_PATH="${PWD}/llvm-${VERSION}"
-BUILD_PATH="${PWD}/buildLLVM-${VERSION}"
-INSTALL_PATH="${PWD}/installLLVM-${VERSION}"
+LLVM_PATH=""
+BUILD_PATH=""
+INSTALL_PATH=""
 DOWNLOAD_PATH="${PWD}/download"
 BASE_URL=""
 PUBLIC_KEY=""
@@ -237,10 +237,19 @@ parseArgs()
         esac
      done
 
+    if [ "${LLVM_PATH}" == "" ]; then
+        LLVM_PATH="${PWD}/llvm-${VERSION}"
+    fi
+    if [ "${BUILD_PATH}" == "" ]; then
+        BUILD_PATH="${PWD}/buildLLVM-${VERSION}"
+    fi
+    if [ "${INSTALL_PATH}" == "" ]; then
+        INSTALL_PATH="${PWD}/installLLVM-${VERSION}"
+    fi
 
     # new URL
     BASE_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${VERSION}"
-    if [ "${VERSION}" < "7.0.1" ]; then
+    if [[ "${VERSION}" < "7.0.1" ]]; then
         # old URL
         BASE_URL="https://releases.llvm.org/${VERSION}"
     fi
