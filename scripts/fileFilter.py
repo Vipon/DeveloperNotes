@@ -80,7 +80,7 @@ class FileType(Enum):
 class FileFilter:
     _table = {
         # FileType : (FileHeaders, extensions)
-        FileType.ELF : ((FileHeader(FileHeaderType.BIN, b'\x07\x45\x4c\x46'),), ('')),
+        FileType.ELF : ((FileHeader(FileHeaderType.BIN, b'\x7f\x45\x4c\x46'),), ('')),
         FileType.PYTHON: ((FileHeader(FileHeaderType.REGEX, '^#!.*python.$'),), ('py', '')),
         FileType.SHELL: ((FileHeader(FileHeaderType.REGEX, '^#!.*bash$'),), ('sh', '')),
     }
