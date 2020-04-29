@@ -116,6 +116,14 @@ if executable('clangd')
     \ })
 endif
 
+if executable('pyls')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'pyls',
+    \ 'cmd': {server_info->['pyls']},
+    \ 'whitelist': ['python'],
+    \ })
+endif
+
 " Close annoying  and excess LSP SignatureHelp
 let g:lsp_signature_help_enabled = 0
 
