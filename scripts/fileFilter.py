@@ -28,10 +28,23 @@ class FileHeader:
             return False
 
 
-    def __compareTextFileHeader(self, fn: str) -> bool:
+    @staticmethod
+    def __getFirstLine(fn: str) -> str:
         fo = open(fn, 'r')
-        header = fo.readline().strip()
+        # !TODO: need to determine max path length
+        # MAX_LEN is needed to prevent creation too big string
+        MAX_LEN = 1024
+        try:
+            header = fo.readline(MAX_LEN).strip()
+        except UnicodeDecodeError:
+            # No unicode file, so
+            return ''
 
+        return header
+
+
+    def __compareTextFileHeader(self, fn: str) -> bool:
+        header = FileHeader.__getFirstLine(fn)
         if header == self.header:
             return True
         else:
@@ -39,8 +52,7 @@ class FileHeader:
 
 
     def __compareRegExFileHeader(self, fn: str) -> bool:
-        fo = open(fn, 'r')
-        header = fo.readline().strip()
+        header = FileHeader.__getFirstLine(fn)
         p = re.compile(self.header)
         if p.match(header) is not None:
             return True
@@ -63,6 +75,7 @@ class FileType(Enum):
     ELF = 0
     PYTHON = 1
     SHELL = 2
+    BASH = 3
 
     @staticmethod
     def fromStrToFileType(typeName: str):
@@ -73,16 +86,26 @@ class FileType(Enum):
             return FileType.PYTHON
         elif typeName == 'shell':
             return FileType.SHELL
+        elif typeName == 'bash':
+            return FileType.BASH
         else:
             raise Exception('Unknown FileType', typeName)
+
+
+def printFileTypes():
+    for t in FileType:
+        print(t.name.lower())
 
 
 class FileFilter:
     _table = {
         # FileType : (FileHeaders, extensions)
         FileType.ELF : ((FileHeader(FileHeaderType.BIN, b'\x7f\x45\x4c\x46'),), ('')),
-        FileType.PYTHON: ((FileHeader(FileHeaderType.REGEX, '^#!.*python.$'),), ('py', '')),
-        FileType.SHELL: ((FileHeader(FileHeaderType.REGEX, '^#!.*bash$'),), ('sh', '')),
+        FileType.PYTHON: ((FileHeader(FileHeaderType.REGEX, '^#!(.*[\s/]+|\s*)python.$'),), ('py', '')),
+        FileType.SHELL: ((FileHeader(FileHeaderType.REGEX, '^#!(.*[\s/]+|\s*)bash$'),
+                          FileHeader(FileHeaderType.REGEX, '^#!(.*[\s/]+|\s*)dash$'),
+                          FileHeader(FileHeaderType.REGEX, '^#!(.*[\s/]+|\s*)sh$'),), ('sh', '')),
+        FileType.BASH: ((FileHeader(FileHeaderType.REGEX, '^#!(.*[\s/]+|\s*)bash$'),), ('sh', '')),
     }
 
     @staticmethod
@@ -128,15 +151,27 @@ class FileFilter:
 
 
 def parseArgs():
-    argParser = argparse.ArgumentParser(description='Filter file by type. Get list of file names and return only files, which types are specified.')
-    argParser.add_argument('--type', '-t', metavar='FILE_TYPE', nargs='+', help='type of filtered files')
-    argParser.add_argument('--file', '-f', metavar='FILE_PATH', nargs='+', help='path to filtered files')
+    argParser = argparse.ArgumentParser(description=
+        'Filter file by type. Get list of file names and return only files,'
+        'which types are specified.'
+        )
+    argParser.add_argument('--type', '-t', metavar='FILE_TYPE', nargs='+',
+        help='type of filtered files')
+    argParser.add_argument('--file', '-f', metavar='FILE_PATH', nargs='+',
+        help='path to filtered files')
+    argParser.add_argument('--print-types-list', action='store_true',
+        help='print list of supported file types')
 
     return argParser.parse_args()
 
 
 def main():
     args = parseArgs()
+
+    if args.print_types_list:
+        printFileTypes()
+        exit(0)
+
     filesNameList = args.file
     types = args.type
 
