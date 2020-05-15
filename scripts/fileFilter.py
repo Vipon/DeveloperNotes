@@ -22,10 +22,7 @@ class FileHeader:
     def __compareBinFileHeader(self, fn: str) -> bool:
         fo = open(fn, 'rb')
         header = fo.read(len(self.header))
-        if header == self.header:
-            return True
-        else:
-            return False
+        return header == self.header
 
 
     @staticmethod
@@ -141,6 +138,7 @@ class FileFilter:
 
         return resList
 
+
     @staticmethod
     def filter(filesNameList: List[str], fileTypes: List[FileType]):
         resList = list()
@@ -178,6 +176,7 @@ def main():
     fileTypes = list(map(FileType.fromStrToFileType, types))
     for fn in FileFilter.filter(filesNameList, fileTypes):
         print(fn)
+
 
 if __name__ == '__main__':
     main()
