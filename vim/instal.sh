@@ -13,10 +13,22 @@ installVimRc()
     cp ${DIR}/.vimrc ~/
 }
 
+installPlugins()
+{
+    vim +PlugInstall +q
+}
+
+installCocConfig()
+{
+    cp ${DIR}/.coc-settings.json ~/.vim
+}
+
 main()
 {
     installVimPlug
     installVimRc
+    installPlugins
+    installCocConfig
 }
 
 main "$@"
