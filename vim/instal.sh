@@ -29,6 +29,7 @@ installLanguageServers()
     pip3 install cmake-language-server
     sudo snap install bash-language-server
     sudo apt install clangd-9
+    sudo apt install hoogle
 }
 
 main()
