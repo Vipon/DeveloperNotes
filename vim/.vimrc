@@ -61,7 +61,7 @@ filetype plugin on
 filetype indent on " file type based indentation
 
 " Indentation settings for using 4 spaces instead of tabs.
-autocmd FileType c,cpp,sh,java,txt set shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType c,cpp,sh,java,txt,idl,cdl,edl set shiftwidth=4 softtabstop=4 expandtab
 autocmd FileType haskell,cmake,vim set shiftwidth=2 softtabstop=2 expandtab
 
 " Show tabs and spaces.
@@ -96,8 +96,8 @@ Plug 'mattn/vim-lsp-settings'
 
 " Autocompletion.
 " asyncomplete has conflict with coc.nvim.
-"Plug 'prabirshrestha/asyncomplete.vim'
-"Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " List ends here. Plugins become visible to Vim after this call.
