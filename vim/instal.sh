@@ -1,7 +1,8 @@
 #!/bin/bash
 
 DIR="$(dirname "$0")"
-VIM_FILE_TYPE_DIR="~/.vim/ftplugin/"
+VIM_DIR="${HOME}/.vim"
+VIM_FILE_TYPE_DETECT_DIR="${VIM_DIR}/ftdetect"
 
 installVimPlug()
 {
@@ -11,9 +12,9 @@ installVimPlug()
 
 installVimRc()
 {
-    cp ${DIR}/.vimrc ~/
-    mkdir -f "${VIM_FILE_TYPE_DIR}"
-    cp ${DIR}/kssLanguage.vim "${VIM_FILE_TYPE_DIR}"
+    cp "${DIR}/.vimrc" ~/
+    mkdir -p "${VIM_FILE_TYPE_DETECT_DIR}"
+    cp "${DIR}/kssLanguage.vim" "${VIM_FILE_TYPE_DETECT_DIR}"
 }
 
 installPlugins()
