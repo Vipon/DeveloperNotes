@@ -64,6 +64,9 @@ filetype indent on " file type based indentation
 autocmd FileType c,cpp,sh,java,txt,idl,cdl,edl set shiftwidth=4 softtabstop=4 expandtab
 autocmd FileType haskell,cmake,vim,psl,yaml set shiftwidth=2 softtabstop=2 expandtab
 
+" Add check spelling for gitcommit
+autocmd FileType gitcommit setlocal spell
+
 " Show tabs and spaces.
 set listchars=tab:>-,nbsp:·,space:·
 set list
