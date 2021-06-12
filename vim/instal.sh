@@ -2,6 +2,7 @@
 
 DIR="$(dirname "$0")"
 VIM_DIR="${HOME}/.vim"
+VIM_AUTOLOAD_DIR="${VIM_DIR}/autoload"
 VIM_COLOR_DIR="${VIM_DIR}/colors"
 VIM_FILE_TYPE_DETECT_DIR="${VIM_DIR}/ftdetect"
 
@@ -17,6 +18,7 @@ installLatestVim()
 
 installVimPlug()
 {
+    mkdir -p "${VIM_AUTOLOAD_DIR}"
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
@@ -30,7 +32,7 @@ installVimRc()
 
 installPlugins()
 {
-    vim +PlugInstall +q
+    vim +PlugInstall +q +q
 }
 
 installCocConfig()
